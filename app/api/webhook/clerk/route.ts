@@ -27,6 +27,7 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
+  const signature = Buffer.from(svix_signature, "base64").toString("utf-8");
 
   // Get the body
   const payload = await req.json();
@@ -42,7 +43,7 @@ export async function POST(req: Request) {
     evt = wh.verify(body, {
       "svix-id": svix_id,
       "svix-timestamp": svix_timestamp,
-      "svix-signature": svix_signature,
+      "svix-signature": signature,
     }) as WebhookEvent;
   } catch (err) {
     console.error("Error verifying webhook:", err);
